@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -11,18 +12,17 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private Transform _target;
 
-    [SerializeField] private Enemy _enemyPrefab;
+    [FormerlySerializedAs("enemyUnitPrefab")] [FormerlySerializedAs("_enemyPrefab")] [SerializeField] private Enemy enemyPrefab;
 
     private ObjectPool _enemyPool;
 
     private void Awake()
     {
-        _enemyPool = new ObjectPool(_enemyPrefab.gameObject, 50);
+        _enemyPool = new ObjectPool(enemyPrefab.gameObject, 50);
     }
 
     private void Start()
     {
-
         StartCoroutine(SpawnEnemiesRoutine());
     }
 

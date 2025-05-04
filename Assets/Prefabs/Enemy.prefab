@@ -73,6 +73,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _damage: 0
+  _radiusAttack: 2
+  _timeToAttack: 1
   _speed: 2
   _target: {fileID: 0}
 --- !u!114 &7105830664615312562
