@@ -2,40 +2,38 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ObjectPool : MonoBehaviour
+public class ObjectPool
 {
-    [SerializeField] private GameObject _parent;
-    [SerializeField] private int _initialSize = 20;
-    
-    private GameObject _prefab;
-    
-    private List<GameObject> _pool = new List<GameObject>();
-    
-    protected void Initialize(GameObject prefab)
+    private readonly GameObject _prefab;
+    private readonly Transform _parent;
+    private readonly List<GameObject> _pool = new();
+
+    public ObjectPool(GameObject prefab, int initialSize, Transform parent = null)
     {
         _prefab = prefab;
-        for (int i = 0; i < _initialSize; i++)
-        {
-            CreateObject();
-        }
+        _parent = parent;
+
+        for (int i = 0; i < initialSize; i++)
+            AddToPool();
     }
 
-    private GameObject CreateObject(int count = 1)
+    private GameObject AddToPool()
     {
-        GameObject spawned = Instantiate(_prefab, _parent.transform);
-        spawned.SetActive(false);
-        _pool.Add(spawned);
-        return spawned;
+        var instance = GameObject.Instantiate(_prefab, _parent);
+        instance.SetActive(false);
+        _pool.Add(instance);
+        return instance;
     }
-    
-    protected void GetObject(out GameObject result)
+
+    public GameObject Get()
     {
-        result = _pool.FirstOrDefault(p => !p.activeSelf);
+        var instance = _pool.FirstOrDefault(p => !p.activeSelf) ?? AddToPool();
+        instance.SetActive(false);
+        return instance;
+    }
 
-        if (result == null)
-        {
-            result = CreateObject(_initialSize);
-        }
-
+    public void ReturnToPool(GameObject instance)
+    {
+        instance.gameObject.SetActive(false);
     }
 }

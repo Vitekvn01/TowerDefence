@@ -42,5 +42,13 @@ public class Enemy : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+
+    public void Attack()
+    {
+        if (_target != null && _target.TryGetComponent<IDamageable>(out var damageable))
+        {
+            damageable.ApplyDamage(_damage);
+        }
+    }
     
 }
