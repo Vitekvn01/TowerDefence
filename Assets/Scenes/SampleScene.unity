@@ -156,11 +156,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbec7c34bba51d041b1547660ba6b9b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _count: 1
-  _spawnDelay: 1
+  _waves:
+  - Template: {fileID: 0}
+    Count: 10
+    Delay: 2
+  - Template: {fileID: 0}
+    Count: 25
+    Delay: 2
+  - Template: {fileID: 0}
+    Count: 3
+    Delay: 2
   _spawnPoint: {fileID: 522763540}
   _target: {fileID: 421594483}
-  enemyPrefab: {fileID: 196328208267294180, guid: 31dae2b6fe5995a459e85b98a82c5674, type: 3}
+  _enemyPrefab: {fileID: 196328208267294180, guid: 31dae2b6fe5995a459e85b98a82c5674, type: 3}
 --- !u!4 &522763540
 Transform:
   m_ObjectHideFlags: 0
@@ -170,7 +178,7 @@ Transform:
   m_GameObject: {fileID: 522763538}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9, y: 1.2537872, z: -41.6}
+  m_LocalPosition: {x: 1.9, y: 0.35, z: -41.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -510,7 +518,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1124556612122450830, guid: 09495d308b2c03044a9d21b980b626e3, type: 3}
       propertyPath: _damage
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2724972779410485053, guid: 09495d308b2c03044a9d21b980b626e3, type: 3}
       propertyPath: m_Name
@@ -526,7 +534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4601056756624650549, guid: 09495d308b2c03044a9d21b980b626e3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.2903
+      value: -0.2459
       objectReference: {fileID: 0}
     - target: {fileID: 4601056756624650549, guid: 09495d308b2c03044a9d21b980b626e3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -587,7 +595,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3878742307482364165, guid: 31dae2b6fe5995a459e85b98a82c5674, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.11
       objectReference: {fileID: 0}
     - target: {fileID: 3878742307482364165, guid: 31dae2b6fe5995a459e85b98a82c5674, type: 3}
       propertyPath: m_LocalPosition.z
@@ -627,6 +635,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5274966344909316936, guid: 31dae2b6fe5995a459e85b98a82c5674, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5397334573810194032, guid: 31dae2b6fe5995a459e85b98a82c5674, type: 3}
+      propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
