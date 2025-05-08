@@ -28,7 +28,7 @@ public class ObjectPool
     public GameObject Get()
     {
         var instance = _pool.FirstOrDefault(p => !p.activeSelf) ?? AddToPool();
-        instance.SetActive(false);
+        instance.SetActive(true);
         return instance;
     }
 

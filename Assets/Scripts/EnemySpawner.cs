@@ -71,8 +71,9 @@ public class EnemySpawner : MonoBehaviour
 
         Enemy enemy = spawned.GetComponent<Enemy>();
         enemy.transform.position = position;
-        enemy.gameObject.SetActive(true);
         enemy.Initialize(_target);
+        AIEnemy aiEnemy = spawned.GetComponent<AIEnemy>();
+        aiEnemy.Initialize(_target);
         
         _spawnEnemies.Add(enemy);
         enemy.OnDeadEvent += OnEnemyDead;
