@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
-
 public class EnemyStateMachine : StateMachine
 {
     private readonly AIEnemy _aiEnemy;

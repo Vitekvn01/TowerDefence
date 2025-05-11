@@ -10,8 +10,8 @@ public class TurretSpawner : MonoBehaviour
         _factory = factory;
     }
 
-    public void SpawnTurret(Vector3 position)
+    public void SpawnTurret(Turret prefab, Vector3 position)
     {
-        _factory.Create(position, Quaternion.identity);
+        _factory.Create(prefab, position, Quaternion.identity);
     }
 }

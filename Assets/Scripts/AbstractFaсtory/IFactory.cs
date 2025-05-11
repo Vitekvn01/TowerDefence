@@ -4,6 +4,6 @@ namespace AbstractFaсtory
 {
     public interface IFactory<T>
     {
-        T Create(Vector3 position, Quaternion rotation);
+        T Create(T prefab, Vector3 position, Quaternion rotation);
     }
 }

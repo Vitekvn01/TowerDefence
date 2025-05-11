@@ -2,20 +2,12 @@ using UnityEngine;
 
 namespace AbstractFaсtory
 {
-    public class TurretFactory
+    public class TurretFactory<T> : IFactory<T> where T : Turret
     {
-        private readonly GameObject _prefab;
-
-        public TurretFactory(GameObject prefab)
+        public T Create(T prefab, Vector3 position, Quaternion rotation)
         {
-            _prefab = prefab;
-        }
-
-        public Turret Create(Vector3 position, Quaternion rotation)
-        {
-            GameObject go = GameObject.Instantiate(_prefab, position, rotation);
-            Turret turret = go.GetComponent<Turret>();
-            return turret;
+            T instance = Object.Instantiate(prefab.gameObject, position, rotation).GetComponent<T>();
+            return instance;
         }
     }
 }
