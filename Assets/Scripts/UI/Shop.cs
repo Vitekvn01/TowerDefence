@@ -22,13 +22,7 @@ public class Shop : MonoBehaviour
     {
         _shopView.OnBuyRequested -= TrySellTurret;
     }
-
-    private void OnSellButtonClick(TurretData turretData)
-    {
-        TrySellTurret(turretData);
-    }
     
-
     private void TrySellTurret(TurretData turretData)
     {
         if (turretData.Price <= 1000)

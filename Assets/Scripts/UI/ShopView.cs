@@ -15,9 +15,7 @@ public class ShopView : MonoBehaviour
     {
         foreach (var view in _turretViews)
         {
-            view.SellButtonClick -= OnSellButtonClick;
-            view.OnDestroyEvent -= OnDestroyView;
-            _turretViews.Remove(view);
+            OnDestroyView(view);
         }
     }
 
