@@ -12,7 +12,8 @@ public class TurretView : MonoBehaviour
 
     private TurretData _turretData;
 
-    public event Action <TurretData, TurretView> SellButtonClick;
+    public event Action <TurretData> SellButtonClick;
+    public event Action<TurretView> OnDestroyEvent; 
 
     private void OnEnable()
     {
@@ -22,6 +23,11 @@ public class TurretView : MonoBehaviour
     private void OnDisable()
     {
         _sellButton.onClick.RemoveListener(OnButtonClick);
+    }
+
+    private void OnDestroy()
+    {
+        OnDestroyEvent?.Invoke(this);
     }
 
     public void Render (TurretData turretData)
@@ -36,6 +42,8 @@ public class TurretView : MonoBehaviour
 
     private void OnButtonClick()
     {
-        SellButtonClick?.Invoke(_turretData, this);
+        SellButtonClick?.Invoke(_turretData);
     }
+    
+    
 }

@@ -34,22 +34,27 @@ public class Shop : MonoBehaviour
     {
         var view = Instantiate(_turretViewPrefab, _itemConteiner.transform);
         view.SellButtonClick += OnSellButtonClick;
+        view.OnDestroyEvent += OnDestroyView;
         view.Render(turretData);
         _turretViews.Add(view);
     }
 
-    private void OnSellButtonClick(TurretData turretData, TurretView view)
+    private void OnSellButtonClick(TurretData turretData)
     {
-        TrySellWeapon(turretData, view);
+        TrySellTurret(turretData);
     }
 
-    private void TrySellWeapon(TurretData turretData, TurretView view)
+    private void OnDestroyView(TurretView view)
     {
-        if (turretData.Price <= 1000 /*_player.Money*/)
+        _turretViews.Remove(view);
+        view.SellButtonClick -= OnSellButtonClick;
+    }
+
+    private void TrySellTurret(TurretData turretData)
+    {
+        if (turretData.Price <= 1000)
         {
             _turretBuilder.StartPlacement(turretData);
-            view.SellButtonClick -= OnSellButtonClick;
-            _turretViews.Remove(view);
         }
     }
 }

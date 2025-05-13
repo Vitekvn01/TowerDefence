@@ -242,9 +242,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2724972779410485053}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: -0.24871662}
-  m_LocalScale: {x: 0.01, y: 1, z: 0.0036917024}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3138517757538061155}
@@ -270,7 +270,7 @@ MonoBehaviour:
   _timeToFire: 1
   _radiusFire: 25
   _rotationSpeed: 100
-  _damage: 50
+  _damage: 100
 --- !u!114 &4445601008289062986
 MonoBehaviour:
   m_ObjectHideFlags: 0
