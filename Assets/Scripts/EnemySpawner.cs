@@ -2,21 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private List<Wave> _waves;
 
-    [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private Transform[] _spawnPoint;
     [SerializeField] private Transform _target;
     
     [SerializeField] private Enemy _enemyPrefab;
 
+    private Player _player;
     private ObjectPool _enemyPool;
-    
     private Wave _currentWave;
+    
     private int _currentWaveNumber = 0; 
     private int _spawned;
+    
     private bool _isAllSpawned = false;
 
     private List<Enemy> _spawnEnemies = new List<Enemy>();
@@ -26,7 +29,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        _enemyPool = new ObjectPool(_enemyPrefab.gameObject, 50);
+        _enemyPool = new ObjectPool(_enemyPrefab.gameObject, 1000);
     }
 
     private void Start()
@@ -35,12 +38,19 @@ public class EnemySpawner : MonoBehaviour
         SetWave(0);
         StartCoroutine(SpawnEnemiesRoutine());
     }
-    
+
+    public void SetPlayer(Player player)
+    {
+        _player = player;
+    }
     public void NextWave() 
     {
-        SetWave(++_currentWaveNumber);
-        _spawned = 0;
-        StartCoroutine(SpawnEnemiesRoutine());
+        if (_currentWaveNumber >= _waves.Count - 1)
+        {
+            SetWave(++_currentWaveNumber);
+            _spawned = 0;
+            StartCoroutine(SpawnEnemiesRoutine());
+        }
     }
     
     private void SetWave(int index)
@@ -48,13 +58,18 @@ public class EnemySpawner : MonoBehaviour
         _isAllSpawned = false;
         _currentWave = _waves[index];
         EnemyCountChanged?.Invoke(0, 1);
+
+        if (_currentWaveNumber >= _waves.Count - 1)
+        {
+            
+        }
     }
     
     private IEnumerator SpawnEnemiesRoutine()
     {
         for (int i = 0; i < _currentWave.Count; i++)
         {
-            Enemy spawnedEnemy = SpawnEnemy(_spawnPoint.position);
+            Enemy spawnedEnemy = SpawnEnemy(_spawnPoint[Random.Range(0, _spawnPoint.Length)].position);
             _spawned++;
             yield return new WaitForSeconds(_currentWave.Delay);
         }
@@ -76,9 +91,7 @@ public class EnemySpawner : MonoBehaviour
         
         _spawnEnemies.Add(enemy);
         enemy.OnDeadEvent += OnEnemyDead;
-        
-
-
+        enemy.OnDeadEvent += OnEnemyReward;
         return enemy;
     }
     
@@ -87,6 +100,12 @@ public class EnemySpawner : MonoBehaviour
         enemy.OnDeadEvent -= OnEnemyDead;
         _spawnEnemies.Remove(enemy);
         ChangeSpawnedEnemy();
+    }
+
+    private void OnEnemyReward(Enemy enemy)
+    {
+        enemy.OnDeadEvent -= OnEnemyReward;
+        _player.Wallet.AddMoney(enemy.Reward);
     }
 
     private void ChangeSpawnedEnemy()
@@ -106,7 +125,6 @@ public class EnemySpawner : MonoBehaviour
 [Serializable]
 public class Wave
 {
-    public GameObject Template;
     public int Count;
-    public int Delay;
+    public float Delay;
 }

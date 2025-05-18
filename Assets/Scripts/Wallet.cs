@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Serialization;
+using IInterfaces;
 
-public class Wallet
+public class Wallet : IWallet
 {
     private int _money;
     public int Money
@@ -39,6 +36,4 @@ public class Wallet
             Money = 0;
         }
     }
-    
-    
 }

@@ -18,7 +18,6 @@ public class AITurret : MonoBehaviour
         _trigger = GetComponent<SphereCollider>();
         _trigger.isTrigger = true;
         _trigger.radius = _turret.RadiusFire;
-
     }
 
     private void OnTriggerEnter(Collider other)

@@ -73,6 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _damage: 0
+  _reward: 100
   _radiusAttack: 2
   _timeToAttack: 1
   _speed: 2

@@ -5,7 +5,8 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private int _health;
     [SerializeField] private int _damage;
-
+    [SerializeField] private int _reward;
+    
     [SerializeField] private float _radiusAttack;
     [SerializeField] private float _timeToAttack;
     [SerializeField] private float _speed;
@@ -13,7 +14,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform _target;
 
     private int _currentHealth;
-    
+
+    public int Reward => _reward;
     public float RadiusAttack => _radiusAttack;
     public float TimeToAttack => _timeToAttack;
     public float Speed => _speed;
@@ -35,6 +37,11 @@ public class Enemy : MonoBehaviour
         if (_timeToAttack < 0)
         {
             _timeToAttack = 0;
+        }
+
+        if (_reward < 0)
+        {
+            _reward = 0;
         }
     }
 

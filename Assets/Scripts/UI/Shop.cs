@@ -1,31 +1,32 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
+using IInterfaces;
 
-public class Shop : MonoBehaviour
+public class Shop
 {
-    [SerializeField] private List<TurretData> _turretDatas;
-    [SerializeField] private TurretBuilder _turretBuilder;
-    [SerializeField] private ShopView _shopView;
+    private readonly List<TurretData> _turretDatas;
+    private readonly TurretBuilder _turretBuilder;
+    private readonly ShopView _shopView;
+    private readonly IWallet _wallet;
 
-    private void Awake()
+    public Shop(List<TurretData> turretDatas, TurretBuilder turretBuilder, ShopView shopView, IWallet wallet)
     {
+        _turretDatas = turretDatas;
+        _turretBuilder = turretBuilder;
+        _shopView = shopView;
+        _wallet = wallet;
+        
         _shopView.OnBuyRequested += TrySellTurret;
-    }
-
-    private void Start()
-    {
         _shopView.Render(_turretDatas);
     }
 
-    private void OnDestroy()
+    public void Dispose()
     {
         _shopView.OnBuyRequested -= TrySellTurret;
     }
-    
+
     private void TrySellTurret(TurretData turretData)
     {
-        if (turretData.Price <= 1000)
+        if (turretData.Price <= _wallet.Money)
         {
             _turretBuilder.StartPlacement(turretData);
             _shopView.Hide();

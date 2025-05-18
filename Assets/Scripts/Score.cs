@@ -1,6 +1,7 @@
 using System;
+using IInterfaces;
 
-public class Score
+public class Score : IScore
 {
     public int Points { get; private set; }
 

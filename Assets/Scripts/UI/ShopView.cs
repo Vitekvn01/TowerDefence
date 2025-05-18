@@ -15,7 +15,11 @@ public class ShopView : MonoBehaviour
     {
         foreach (var view in _turretViews)
         {
-            OnDestroyView(view);
+            if (view != null)
+            {
+                OnDestroyView(view);  
+            }
+
         }
     }
 

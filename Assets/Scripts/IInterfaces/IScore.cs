@@ -1,7 +1,11 @@
+using System;
+
 namespace IInterfaces
 {
-    public class IScore
+    public interface IScore
     {
-        
+        public event Action<int> OnScoreChanged;
+
+        public void AddPoints(int count);
     }
 }

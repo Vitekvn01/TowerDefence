@@ -1,35 +1,34 @@
 using AbstractFaсtory;
+using IInterfaces;
 using UnityEngine;
 
-public class TurretBuilder : MonoBehaviour
+public class TurretBuilder
 {
     private const float PlaceRadius = 1;
     
-    [SerializeField] private LayerMask _placementLayerMask;
-    
-    private IFactory<Turret> _factory;
+    private readonly LayerMask _placementLayerMask;
+    private readonly IFactory<Turret> _factory;
+    private readonly IWallet _wallet;
+
     private TurretData _selectedData;
     private GameObject _currentPreview;
     
     
-    public void Initialize(IFactory<Turret> factory)
+    public TurretBuilder(LayerMask placementLayer, IFactory<Turret> factory, IWallet wallet)
     {
+        _placementLayerMask = placementLayer;
         _factory = factory;
+        _wallet = wallet;
     }
 
     public void StartPlacement(TurretData data)
     {
         Debug.Log("StartPlacement");
         _selectedData = data;
-        _currentPreview = Instantiate(data.PreviewPrefab);
+        _currentPreview = Object.Instantiate(data.PreviewPrefab);
     }
 
-    private void Start()
-    {
-        Initialize(new TurretFactory<Turret>());
-    }
-
-    private void Update()
+    public void Update()
     {
         if (_selectedData != null)
         {
@@ -57,11 +56,6 @@ public class TurretBuilder : MonoBehaviour
         int mask = ~_placementLayerMask.value;
         Collider[] overlaps = Physics.OverlapSphere(position, radius, mask, QueryTriggerInteraction.Ignore);
         
-        foreach (var VARIABLE in overlaps)
-        {
-            Debug.Log(VARIABLE.gameObject.name);
-        }
-        
         if (overlaps.Length == 0)
         {
 
@@ -82,7 +76,7 @@ public class TurretBuilder : MonoBehaviour
     {
         Debug.Log("Place");
         _factory.Create(_selectedData.TurretPrefab, position, Quaternion.identity);
-        Destroy(_currentPreview);
+        Object.Destroy(_currentPreview);
         _selectedData = null;
     }
 }

@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using IInterfaces;
 
 public class Player
 {
-    public Wallet Wallet { get; }
-    public Score Score { get; }
+    public IWallet Wallet { get; private set;}
+    public IScore Score { get; private set;}
 
     public Player(Wallet wallet, Score score)
     {
