@@ -17,14 +17,20 @@ public class EnemySpawner : MonoBehaviour
     private ObjectPool _enemyPool;
     private Wave _currentWave;
     
-    private int _currentWaveNumber = 0; 
+    private int _currentWaveIndex = 0; 
     private int _spawned;
     
     private bool _isAllSpawned = false;
+    private bool _isLastWave = false;
 
     private List<Enemy> _spawnEnemies = new List<Enemy>();
     public event Action AllEnemySpawnedEvent;
     public event Action AllEnemyDeadEvent;
+    
+    public event Action<int, int> OnWaveChanged;
+    public event Action<int, int> OnEnemiesChanged;
+    public event Action LastWaveStartedEvent;
+    public event Action LastWaveCompletedEvent;
 
     private void Awake()
     {
@@ -35,20 +41,33 @@ public class EnemySpawner : MonoBehaviour
     {
         AllEnemyDeadEvent += NextWave;
         SetWave(0);
-        StartCoroutine(SpawnEnemiesRoutine());
+        OnWaveChanged?.Invoke(0, _waves.Count);
     }
 
     public void SetPlayer(Player player)
     {
         _player = player;
     }
-    public void NextWave() 
+
+    public void StartWave()
     {
-        if (_currentWaveNumber >= _waves.Count - 1)
+        StartCoroutine(SpawnEnemiesRoutine());
+        
+        if (_currentWaveIndex == _waves.Count - 1)
         {
-            SetWave(++_currentWaveNumber);
+            _isLastWave = true;
+            LastWaveStartedEvent?.Invoke();
+            Debug.Log("Послденяя волна началась");
+        }
+    }
+    private void NextWave() 
+    {
+        _currentWaveIndex += 1;
+        
+        if (_currentWaveIndex <= _waves.Count - 1)
+        {
+            SetWave(_currentWaveIndex);
             _spawned = 0;
-            StartCoroutine(SpawnEnemiesRoutine());
         }
     }
     
@@ -56,19 +75,16 @@ public class EnemySpawner : MonoBehaviour
     {
         _isAllSpawned = false;
         _currentWave = _waves[index];
-
-        if (_currentWaveNumber >= _waves.Count - 1)
-        {
-            
-        }
     }
     
     private IEnumerator SpawnEnemiesRoutine()
     {
+        OnEnemiesChanged?.Invoke(0, _currentWave.Count);
+        
         for (int i = 0; i < _currentWave.Count; i++)
         {
-            Enemy spawnedEnemy = SpawnEnemy(_spawnPoint[Random.Range(0, _spawnPoint.Length)].position);
             _spawned++;
+            Enemy spawnedEnemy = SpawnEnemy(_spawnPoint[Random.Range(0, _spawnPoint.Length)].position);
             yield return new WaitForSeconds(_currentWave.Delay);
         }
 
@@ -107,14 +123,21 @@ public class EnemySpawner : MonoBehaviour
 
     private void ChangeSpawnedEnemy()
     {
-        _spawned -= 1;
-        
-        if (_spawned <= 0)
+        _spawned--;
+
+        if (_spawned <= 0 && _isAllSpawned)
         {
-            if (_isAllSpawned)
+            OnEnemiesChanged?.Invoke(0, _currentWave.Count);
+            
+            if (_isLastWave)
             {
-                AllEnemyDeadEvent?.Invoke();
+                Debug.Log("ПОСЛЕДНЯЯ ВОЛНА завершена");
+                LastWaveCompletedEvent?.Invoke();
             }
+            
+            AllEnemyDeadEvent?.Invoke();
+            
+            OnWaveChanged?.Invoke(_currentWaveIndex, _waves.Count);
         }
     }
 }

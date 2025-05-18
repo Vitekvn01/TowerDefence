@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameInstaller : MonoBehaviour
 {
+    [Header("HUD")] 
+    [SerializeField] private InfoWavePanel _infoPanel;
+    [SerializeField] private NextWaveButton _nextWaveButton;
     
     [Header("Player")]
     [SerializeField] private int _startMoney;
@@ -30,9 +33,14 @@ public class GameInstaller : MonoBehaviour
         wallet.OnChangeCountEvent += _countMoneyView.ChangeCountText;
         Score score = new Score();
         _player = new Player(wallet, score);
+
+        _nextWaveButton.OnClickButton += _enemySpawner.StartWave;
         
         _enemySpawner.SetPlayer(_player);
-
+        _enemySpawner.OnEnemiesChanged += _infoPanel.ChangeEnemiesText;
+        _enemySpawner.OnWaveChanged += _infoPanel.ChangeWavesText;
+        _enemySpawner.AllEnemyDeadEvent += _nextWaveButton.Show;
+        
         IFactory<Turret> turretFactory = new TurretFactory<Turret>();
         _turretBuilder = new TurretBuilder(_placementLayerMask, turretFactory, wallet);
         _shop = new Shop(_turretDatas, _turretBuilder, _shopView, wallet);
@@ -47,5 +55,11 @@ public class GameInstaller : MonoBehaviour
     {
         _shop.Dispose();
         _player.Wallet.OnChangeCountEvent -= _countMoneyView.ChangeCountText;
+        
+        _nextWaveButton.OnClickButton -= _enemySpawner.StartWave;
+        
+        _enemySpawner.OnEnemiesChanged -= _infoPanel.ChangeEnemiesText;
+        _enemySpawner.OnWaveChanged -= _infoPanel.ChangeEnemiesText;
+        _enemySpawner.AllEnemyDeadEvent -= _nextWaveButton.Show;
     }
 }
