@@ -25,7 +25,6 @@ public class EnemySpawner : MonoBehaviour
     private List<Enemy> _spawnEnemies = new List<Enemy>();
     public event Action AllEnemySpawnedEvent;
     public event Action AllEnemyDeadEvent;
-    public event Action<int, int> EnemyCountChanged;
 
     private void Awake()
     {
@@ -57,7 +56,6 @@ public class EnemySpawner : MonoBehaviour
     {
         _isAllSpawned = false;
         _currentWave = _waves[index];
-        EnemyCountChanged?.Invoke(0, 1);
 
         if (_currentWaveNumber >= _waves.Count - 1)
         {
@@ -76,7 +74,6 @@ public class EnemySpawner : MonoBehaviour
 
         _isAllSpawned = true;
         AllEnemySpawnedEvent?.Invoke();
-        EnemyCountChanged?.Invoke(_spawned, _currentWave.Count);
     }
 
     private Enemy SpawnEnemy(Vector3 position)
