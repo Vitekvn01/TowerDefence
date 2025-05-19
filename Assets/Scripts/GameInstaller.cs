@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class GameInstaller : MonoBehaviour
 {
-    [Header("HUD")] 
+    
+    [Header("UI")] 
     [SerializeField] private InfoWavePanel _infoPanel;
     [SerializeField] private NextWaveButton _nextWaveButton;
+    [SerializeField] private UIElement _winPanel;
+    [SerializeField] private UIElement _losePanel;
     
     [Header("Player")]
     [SerializeField] private int _startMoney;
+    [SerializeField] private DefenceTarget _defenceTarget;
     
     [SerializeField] private EnemySpawner _enemySpawner;
     [SerializeField] private CountTextView _countScoreView;
@@ -25,6 +29,7 @@ public class GameInstaller : MonoBehaviour
     private Player _player;
     private TurretBuilder _turretBuilder;
     private Shop _shop;
+    private GameResultHandler _gameResultHandler;
     
     private void Awake()
     {
@@ -40,6 +45,10 @@ public class GameInstaller : MonoBehaviour
         _enemySpawner.OnEnemiesChanged += _infoPanel.ChangeEnemiesText;
         _enemySpawner.OnWaveChanged += _infoPanel.ChangeWavesText;
         _enemySpawner.AllEnemyDeadEvent += _nextWaveButton.Show;
+        
+        _gameResultHandler = new GameResultHandler(_winPanel, _losePanel);
+        _enemySpawner.LastWaveCompletedEvent += _gameResultHandler.Win;
+        _defenceTarget.OnDeadEvent += _gameResultHandler.Lose;
         
         IFactory<Turret> turretFactory = new TurretFactory<Turret>();
         _turretBuilder = new TurretBuilder(_placementLayerMask, turretFactory, wallet);
