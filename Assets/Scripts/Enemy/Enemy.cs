@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _timeToAttack;
     [SerializeField] private float _speed;
     
-    [SerializeField] private Transform _target;
+    private DefenceTarget _target;
 
     private int _currentHealth;
 
@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
     public float RadiusAttack => _radiusAttack;
     public float TimeToAttack => _timeToAttack;
     public float Speed => _speed;
-    public Transform Target => _target;
+    public Transform Target => _target.transform;
     
     public event Action<Enemy> OnDeadEvent;
     private void OnValidate()
@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour
         Gizmos.DrawSphere(transform.position, _radiusAttack);
     }
 
-    public void Initialize(Transform target)
+    public void Initialize(DefenceTarget target)
     {
         _target = target;
         _currentHealth = _health;
@@ -71,9 +71,9 @@ public class Enemy : MonoBehaviour
     public void Attack()
     {
         Debug.Log("Атакую!");
-        if (_target != null && _target.TryGetComponent<IDamageable>(out var damageable))
+        if (_target != null)
         {
-            damageable.ApplyDamage(_damage);
+            _target.ApplyDamage(_damage);
         }
     }
     

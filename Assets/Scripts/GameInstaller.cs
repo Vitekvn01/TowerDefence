@@ -15,8 +15,10 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private int _startMoney;
     [SerializeField] private DefenceTarget _defenceTarget;
     
-    [SerializeField] private EnemySpawner _enemySpawner;
-    [SerializeField] private CountTextView _countScoreView;
+    [Header("EnemySpawner")]
+    [SerializeField] private List<Wave> _waves;
+    [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private Enemy _enemyPrefab;
     
     [Header("Shop")] 
     [SerializeField] private CountTextView _countMoneyView;
@@ -27,9 +29,11 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private LayerMask _placementLayerMask;
     
     private Player _player;
-    private TurretBuilder _turretBuilder;
+    private EnemySpawner _enemySpawner;
     private Shop _shop;
+    private TurretBuilder _turretBuilder;
     private GameResultHandler _gameResultHandler;
+
     
     private void Awake()
     {
@@ -39,14 +43,17 @@ public class GameInstaller : MonoBehaviour
         Score score = new Score();
         _player = new Player(wallet, score);
 
-        _nextWaveButton.OnClickButton += _enemySpawner.StartWave;
         
-        _enemySpawner.SetPlayer(_player);
+
+        _enemySpawner = new EnemySpawner(_waves, _spawnPoints, _defenceTarget, _enemyPrefab, _player);
         _enemySpawner.OnEnemiesChanged += _infoPanel.ChangeEnemiesText;
         _enemySpawner.OnWaveChanged += _infoPanel.ChangeWavesText;
         _enemySpawner.AllEnemyDeadEvent += _nextWaveButton.Show;
         
+        _nextWaveButton.OnClickButton += _enemySpawner.StartWave;
+        
         _gameResultHandler = new GameResultHandler(_winPanel, _losePanel);
+        
         _enemySpawner.LastWaveCompletedEvent += _gameResultHandler.Win;
         _defenceTarget.OnDeadEvent += _gameResultHandler.Lose;
         
@@ -58,6 +65,7 @@ public class GameInstaller : MonoBehaviour
     private void Update()
     {
         _turretBuilder.Update();
+        _enemySpawner.Update();
     }
 
     private void OnDestroy()

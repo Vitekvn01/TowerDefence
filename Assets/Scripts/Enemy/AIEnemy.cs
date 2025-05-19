@@ -51,9 +51,7 @@ public class AIEnemy : MonoBehaviour
 
     public bool TryCheckDistanceToAttack()
     {
-        if (Enemy.Target == null)
-            return false;
-        return Vector3.Distance(transform.position, Enemy.Target.position) < Enemy.RadiusAttack;
+        return Vector3.Distance(transform.position, Enemy.Target.position) <= Enemy.RadiusAttack;
     }
 
     public void Initialize(Transform target)
@@ -63,10 +61,5 @@ public class AIEnemy : MonoBehaviour
         _targetPos = target.position;
         _agent.isStopped = false;
         FSM.ChangeState(new MoveToTargetState(FSM));
-    }
-
-    private void SetSpeedMove(float speed)
-    {
-        _agent.speed = speed;
     }
 }
