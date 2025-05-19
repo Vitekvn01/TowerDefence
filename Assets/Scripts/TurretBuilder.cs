@@ -1,5 +1,6 @@
 using AbstractFaсtory;
 using IInterfaces;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class TurretBuilder
@@ -9,6 +10,7 @@ public class TurretBuilder
     private readonly LayerMask _placementLayerMask;
     private readonly IFactory<Turret> _factory;
     private readonly IWallet _wallet;
+    private readonly NavMeshSurface _navMeshSurface;
 
     private TurretData _selectedData;
     private GameObject _currentPreview;
@@ -43,7 +45,7 @@ public class TurretBuilder
                 
                 if (CanPlaceTurret(_currentPreview.transform.position, PlaceRadius) && Input.GetMouseButtonDown(0))
                 {
-                    PlaceTurret(hit.point);
+                    PlaceTurret(hit.point, hit.transform);
                 }
             }
         }
@@ -72,10 +74,11 @@ public class TurretBuilder
     }
     
 
-    private void PlaceTurret(Vector3 position)
+    private void PlaceTurret(Vector3 position, Transform parent = null)
     {
         Debug.Log("Place");
-        _factory.Create(_selectedData.TurretPrefab, position, Quaternion.identity);
+        Turret createTurret = _factory.Create(_selectedData.TurretPrefab, position, Quaternion.identity);
+        createTurret.transform.parent = parent;
         Object.Destroy(_currentPreview);
         _selectedData = null;
     }

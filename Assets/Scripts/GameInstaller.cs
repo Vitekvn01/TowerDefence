@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using AbstractFaсtory;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class GameInstaller : MonoBehaviour
@@ -27,6 +28,7 @@ public class GameInstaller : MonoBehaviour
     
     [Header("Turret Builder")]
     [SerializeField] private LayerMask _placementLayerMask;
+    [SerializeField] private NavMeshSurface _navMeshSurface;
     
     private Player _player;
     private EnemySpawner _enemySpawner;
@@ -42,14 +44,13 @@ public class GameInstaller : MonoBehaviour
         wallet.OnChangeCountEvent += _countMoneyView.ChangeCountText;
         Score score = new Score();
         _player = new Player(wallet, score);
-
         
-
         _enemySpawner = new EnemySpawner(_waves, _spawnPoints, _defenceTarget, _enemyPrefab, _player);
         _enemySpawner.OnEnemiesChanged += _infoPanel.ChangeEnemiesText;
         _enemySpawner.OnWaveChanged += _infoPanel.ChangeWavesText;
         _enemySpawner.AllEnemyDeadEvent += _nextWaveButton.Show;
         
+        _infoPanel.Init(_enemySpawner);
         _nextWaveButton.OnClickButton += _enemySpawner.StartWave;
         
         _gameResultHandler = new GameResultHandler(_winPanel, _losePanel);
@@ -78,5 +79,8 @@ public class GameInstaller : MonoBehaviour
         _enemySpawner.OnEnemiesChanged -= _infoPanel.ChangeEnemiesText;
         _enemySpawner.OnWaveChanged -= _infoPanel.ChangeEnemiesText;
         _enemySpawner.AllEnemyDeadEvent -= _nextWaveButton.Show;
+        
+        _enemySpawner.LastWaveCompletedEvent -= _gameResultHandler.Win;
+        _defenceTarget.OnDeadEvent -= _gameResultHandler.Lose;
     }
 }

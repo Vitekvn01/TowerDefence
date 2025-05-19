@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4169953588819403560}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: view
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 8207098444647076913}
   - component: {fileID: 2955781140435323250}
   - component: {fileID: 4001858666437805981}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 7912425639644316511}
   - component: {fileID: 7747921008992363016}
   - component: {fileID: 1817431315995411428}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 5866205131225308792}
   - component: {fileID: 4331268365462303018}
   - component: {fileID: 5199849475791316271}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 391352286296873009}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1892053577937881818}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: TurretPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}

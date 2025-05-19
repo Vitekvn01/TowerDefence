@@ -24,6 +24,9 @@ public class EnemySpawner
     private bool _isSpawning = false;
     
     private List<Enemy> _spawnEnemies = new List<Enemy>();
+
+    public IReadOnlyList<Wave> Waves => _waves;
+    public Wave CurrentWave => _currentWave;
     
     public event Action AllEnemySpawnedEvent;
     public event Action AllEnemyDeadEvent;
@@ -67,7 +70,7 @@ public class EnemySpawner
     
     public void Update()
     {
-        if (_isSpawning == true || Time.timeScale != 0f || _isAllSpawned == false)
+        if (_isSpawning == true &&  _isAllSpawned == false)
         {
             _spawnTimer += Time.deltaTime;
 
@@ -86,8 +89,6 @@ public class EnemySpawner
                 }
             }
         }
-
-
     }
     
     private void NextWave() 
@@ -140,7 +141,9 @@ public class EnemySpawner
     private void ChangeSpawnedEnemy()
     {
         _deadCount++;
-
+        
+        OnEnemiesChanged?.Invoke(_deadCount, _currentWave.Count);
+        
         TryCheckWaveComplete();
     }
 
@@ -148,8 +151,6 @@ public class EnemySpawner
     {
         if (_deadCount == _spawnedCount && _isAllSpawned)
         {
-            OnEnemiesChanged?.Invoke(0, _currentWave.Count);
-            
             if (_isLastWave)
             {
                 Debug.Log("ПОСЛЕДНЯЯ ВОЛНА завершена");
@@ -157,7 +158,7 @@ public class EnemySpawner
             }
             
             AllEnemyDeadEvent?.Invoke();
-            
+            OnEnemiesChanged?.Invoke(0, _currentWave.Count);
             OnWaveChanged?.Invoke(_currentWaveIndex, _waves.Count);
         }
     }
