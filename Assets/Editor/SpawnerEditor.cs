@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(GameInstaller))]
+[CustomEditor(typeof(LevelInstaller))]
 public class SpawnerEditor : Editor
 {
     private SerializedProperty _spawnPoints;
-    private GameInstaller spawner;
+    private LevelInstaller spawner;
 
     private void OnEnable()
     {
         _spawnPoints = serializedObject.FindProperty("_spawnPoints");
-        spawner = (GameInstaller)target;
+        spawner = (LevelInstaller)target;
     }
     
     public override void OnInspectorGUI()
@@ -33,7 +33,7 @@ public class SpawnerEditor : Editor
         }
     }
 
-    private void AddSpawnPoint(GameInstaller spawner)
+    private void AddSpawnPoint(LevelInstaller spawner)
     {
         int index = _spawnPoints.arraySize;
 
@@ -46,7 +46,7 @@ public class SpawnerEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    private void ClearSpawnPoints(GameInstaller spawner)
+    private void ClearSpawnPoints(LevelInstaller spawner)
     {
         for (int i = 0; i < _spawnPoints.arraySize; i++)
         {
