@@ -3092,16 +3092,16 @@ MonoBehaviour:
   _waves:
   - Count: 100
     MinDelay: 0.1
-    MaxDelay: 0.2
-  - Count: 200
-    MinDelay: 0.1
     MaxDelay: 0.5
   - Count: 250
-    MinDelay: 0.15
-    MaxDelay: 0.2
-  - Count: 125
     MinDelay: 0.1
-    MaxDelay: 0.1
+    MaxDelay: 0.4
+  - Count: 355
+    MinDelay: 0.1
+    MaxDelay: 0.3
+  - Count: 550
+    MinDelay: 0.1
+    MaxDelay: 0.2
   _spawnPoints:
   - {fileID: 795459530}
   - {fileID: 1503932637}

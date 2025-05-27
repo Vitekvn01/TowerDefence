@@ -65,7 +65,7 @@ public class LevelManager : ILevelManager
       if (_currentLevel.NextLevel != null)
       {
          LoadLevel(_currentLevel.NextLevel);
-         _currentLevel = _currentLevel.NextLevel;
+         /*_currentLevel = _currentLevel.NextLevel;*/
       }
       else
       {

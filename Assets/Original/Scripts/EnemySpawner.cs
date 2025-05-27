@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemySpawner
 {
+    private const int InitialEnemySize = 200;
+    
     private readonly List<Wave> _waves;
     private readonly Transform[] _spawnPoints;
     private readonly DefenceTarget _target;
@@ -47,7 +49,7 @@ public class EnemySpawner
 
         foreach (var prefab in _enemyPrefabs)
         {
-            _enemyPools[prefab] = new ObjectPool(prefab.gameObject, 100);
+            _enemyPools[prefab] = new ObjectPool(prefab.gameObject, InitialEnemySize);
         }
         
         AllEnemyDeadEvent += NextWave;
