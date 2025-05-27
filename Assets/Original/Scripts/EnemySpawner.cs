@@ -7,10 +7,9 @@ public class EnemySpawner
     private readonly List<Wave> _waves;
     private readonly Transform[] _spawnPoints;
     private readonly DefenceTarget _target;
-    private readonly Enemy _enemyPrefab;
+    private readonly List<Enemy> _enemyPrefabs;
 
     private Player _player;
-    private ObjectPool _enemyPool;
     private Wave _currentWave;
     
     private int _currentWaveIndex = 0; 
@@ -18,11 +17,13 @@ public class EnemySpawner
     private int _deadCount = 0;
     
     private float _spawnTimer = 0f;
+    private float _currentDelay;
     
     private bool _isAllSpawned = false;
     private bool _isLastWave = false;
     private bool _isSpawning = false;
     
+    private Dictionary<Enemy, ObjectPool> _enemyPools = new Dictionary<Enemy, ObjectPool>();
     private List<Enemy> _spawnEnemies = new List<Enemy>();
 
     public IReadOnlyList<Wave> Waves => _waves;
@@ -36,15 +37,18 @@ public class EnemySpawner
     public event Action LastWaveStartedEvent;
     public event Action LastWaveCompletedEvent;
 
-    public EnemySpawner(List<Wave> waves, Transform[] spawnPoints, DefenceTarget target, Enemy enemyPrefab, Player player)
+    public EnemySpawner(List<Wave> waves, Transform[] spawnPoints, DefenceTarget target, List<Enemy> enemyPrefabs, Player player)
     {
         _waves = waves;
         _spawnPoints = spawnPoints;
         _target = target;
-        _enemyPrefab = enemyPrefab;
+        _enemyPrefabs = enemyPrefabs;
         _player = player;
-        
-        _enemyPool = new ObjectPool(_enemyPrefab.gameObject, 1000);
+
+        foreach (var prefab in _enemyPrefabs)
+        {
+            _enemyPools[prefab] = new ObjectPool(prefab.gameObject, 100);
+        }
         
         AllEnemyDeadEvent += NextWave;
         SetWave(0);
@@ -55,6 +59,7 @@ public class EnemySpawner
     {
         _isSpawning = true;
         _spawnTimer = 0f;
+        _currentDelay = _currentWave.GetRandomDelay();
         _spawnedCount = 0;
         _deadCount = 0;    
         
@@ -74,18 +79,20 @@ public class EnemySpawner
         {
             _spawnTimer += Time.deltaTime;
 
-            if (_spawnedCount < _currentWave.Count && _spawnTimer >= _currentWave.Delay)
+            if (_spawnedCount < _currentWave.Count && _spawnTimer >= _currentDelay)
             {
                 _spawnTimer = 0f;
                 _spawnedCount++;
 
                 SpawnEnemy(_spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length)].position);
+                _currentDelay = _currentWave.GetRandomDelay();
 
                 if (_spawnedCount >= _currentWave.Count)
                 {
                     _isAllSpawned = true;
-                    _isSpawning = false;
                     AllEnemySpawnedEvent?.Invoke();
+                    
+                    _isSpawning = false;
                 }
             }
         }
@@ -111,7 +118,8 @@ public class EnemySpawner
 
     private Enemy SpawnEnemy(Vector3 position)
     {
-        GameObject spawned = _enemyPool.Get();
+        var prefab = _enemyPrefabs[UnityEngine.Random.Range(0, _enemyPrefabs.Count)];
+        GameObject spawned = _enemyPools[prefab].Get();
 
         Enemy enemy = spawned.GetComponent<Enemy>();
         enemy.transform.position = position;
@@ -168,5 +176,19 @@ public class EnemySpawner
 public class Wave
 {
     public int Count;
-    public float Delay;
+    
+    [Range(0.1f, 5f)]
+    public float MinDelay;
+    
+    [Range(0.1f, 5f)]
+    public float MaxDelay;
+
+    public float GetRandomDelay()
+    {
+       float random = UnityEngine.Random.Range(MinDelay, MaxDelay);
+       Debug.Log(random);
+       return random;
+    }
+    
+
 }

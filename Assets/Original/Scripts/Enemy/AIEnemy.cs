@@ -19,6 +19,9 @@ public class AIEnemy : MonoBehaviour
             rb.isKinematic = true;
 
         Enemy = GetComponent<Enemy>();
+        
+        _agent.speed = Enemy.Speed;
+        
         FSM = new EnemyStateMachine(this);
     }
 

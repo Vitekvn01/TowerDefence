@@ -36,7 +36,7 @@ public class TurretView : MonoBehaviour
 
         _lable.text = turretData.Label;
         _price.text = turretData.Price.ToString();
-        /*_icon.sprite = turretData.Icon;*/
+        _icon.sprite = turretData.Image;
     }
     
 

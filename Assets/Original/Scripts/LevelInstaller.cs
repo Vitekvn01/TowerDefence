@@ -21,15 +21,18 @@ public class LevelInstaller : MonoBehaviour
     [Header("EnemySpawner")]
     [SerializeField] private List<Wave> _waves;
     [SerializeField] private Transform[] _spawnPoints;
-    [SerializeField] private Enemy _enemyPrefab;
+    [SerializeField] private List<Enemy> _enemyPrefabs;
     
     [Header("Shop")] 
-    [SerializeField] private CountTextView _countMoneyView;
+    [SerializeField] private CountTextView _moneyView;
     [SerializeField] private ShopView _shopView;
     [SerializeField] private List<TurretData> _turretDatas;
     
     [Header("Turret Builder")]
     [SerializeField] private LayerMask _placementLayerMask;
+    [SerializeField] private Transform _buildPoint;
+    [SerializeField] private float _buildRadius;
+    [SerializeField] private DrawerCircle _drawerCirclePrefab;
     
     private Player _player;
     private EnemySpawner _enemySpawner;
@@ -41,11 +44,11 @@ public class LevelInstaller : MonoBehaviour
     private void Awake()
     {
         Wallet wallet = new Wallet(_startMoney);
-        _countMoneyView.ChangeCountText(wallet.Money);
-        wallet.OnChangeCountEvent += _countMoneyView.ChangeCountText;
+        _moneyView.ChangeCountText(wallet.Money);
+        wallet.OnChangeCountEvent += _moneyView.ChangeCountText;
         _player = new Player(wallet);
         
-        _enemySpawner = new EnemySpawner(_waves, _spawnPoints, _defenceTarget, _enemyPrefab, _player);
+        _enemySpawner = new EnemySpawner(_waves, _spawnPoints, _defenceTarget, _enemyPrefabs, _player);
         _enemySpawner.OnEnemiesChanged += _infoPanel.ChangeEnemiesText;
         _enemySpawner.OnWaveChanged += _infoPanel.ChangeWavesText;
         _enemySpawner.AllEnemyDeadEvent += _nextWaveButton.Show;
@@ -67,7 +70,7 @@ public class LevelInstaller : MonoBehaviour
         _healthBar.Initialize(_defenceTarget);
         
         IFactory<Turret> turretFactory = new TurretFactory<Turret>();
-        _turretBuilder = new TurretBuilder(_placementLayerMask, turretFactory, wallet);
+        _turretBuilder = new TurretBuilder(_placementLayerMask, turretFactory, _buildPoint.position, _buildRadius, _drawerCirclePrefab);
         _shop = new Shop(_turretDatas, _turretBuilder, _shopView, wallet);
     }
 
@@ -80,7 +83,7 @@ public class LevelInstaller : MonoBehaviour
     private void OnDestroy()
     {
         _shop.Dispose();
-        _player.Wallet.OnChangeCountEvent -= _countMoneyView.ChangeCountText;
+        _player.Wallet.OnChangeCountEvent -= _moneyView.ChangeCountText;
         
         _nextWaveButton.OnClickButton -= _enemySpawner.StartWave;
         
@@ -92,4 +95,14 @@ public class LevelInstaller : MonoBehaviour
         _defenceTarget.OnDeadEvent -= _gameResultHandler.Lose;
         _pauseMenu.OnExitClickEvent -= _levelManager.LoadFirstScene;
     }
+    
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (_buildPoint == null) return;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(_buildPoint.position, _buildRadius);
+    }
+#endif
 }

@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Turret : MonoBehaviour
 {
-    [SerializeField] private Bullet _bulletPrefab;
+    [SerializeField] private Projectile _projectilePrefab;
     
     [SerializeField] private Transform _tower;
     [SerializeField] private Transform _shootPoint;
@@ -25,7 +26,7 @@ public class Turret : MonoBehaviour
 
     private void Awake()
     {
-        _bulletPool = new ObjectPool(_bulletPrefab.gameObject, 100, gameObject.transform);
+        _bulletPool = new ObjectPool(_projectilePrefab.gameObject, 100, gameObject.transform);
     }
 
     private void Update()
@@ -62,13 +63,13 @@ public class Turret : MonoBehaviour
 
     private void Fire()
     {
-        Bullet bullet = _bulletPool.Get().GetComponent<Bullet>();
+        Projectile projectile = _bulletPool.Get().GetComponent<Projectile>();
         
-        bullet.transform.position = _shootPoint.position;
-        bullet.transform.rotation = _shootPoint.rotation;
+        projectile.transform.position = _shootPoint.position;
+        projectile.transform.rotation = _shootPoint.rotation;
         
-        bullet.gameObject.SetActive(true);;
-        bullet.Initialization(_damage);
+        projectile.gameObject.SetActive(true);;
+        projectile.Initialization(_damage);
     }
     
 }

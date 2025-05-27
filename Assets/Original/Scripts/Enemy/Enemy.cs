@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    private const string RunAnimation = "Run";
+    private const string AttackAnimation = "Attack";
+    private const string DamageAnimation = "Damage";
+    private const string WalkAnimation = "Walk";
+    
     [SerializeField] private int _health;
     [SerializeField] private int _damage;
     [SerializeField] private int _reward;
@@ -10,6 +15,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _radiusAttack;
     [SerializeField] private float _timeToAttack;
     [SerializeField] private float _speed;
+    
+    [SerializeField] private Animator _animator;
     
     private DefenceTarget _target;
 
@@ -59,6 +66,7 @@ public class Enemy : MonoBehaviour
 
     public void ApplyDamage(int damage)
     {
+        _animator.Play(DamageAnimation);
         _currentHealth -= damage;
 
         if (_currentHealth <= 0)
@@ -70,9 +78,10 @@ public class Enemy : MonoBehaviour
 
     public void Attack()
     {
+        _animator.Play(AttackAnimation);
         Debug.Log("Атакую!");
         if (_target != null)
-        {
+        {   
             _target.ApplyDamage(_damage);
         }
     }

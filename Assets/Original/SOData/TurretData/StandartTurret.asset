@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: StandartTurret
   m_EditorClassIdentifier: 
   _turretPrefab: {fileID: 1124556612122450830, guid: 09495d308b2c03044a9d21b980b626e3, type: 3}
-  _previewPrefab: {fileID: 8881214516429762192, guid: 83eade02f73e1eb4d8a3b17240361d1c, type: 3}
+  _previewPrefab: {fileID: 2724972779410485053, guid: 54973523f6a18a6499e23a92350a83ac, type: 3}
+  _image: {fileID: 21300000, guid: a3409ec4b8e079c4185634af8e8779bd, type: 3}
   _label: Turret
-  _price: 250
+  _price: 100

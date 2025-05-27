@@ -13,11 +13,11 @@ public class InfoWavePanel : MonoBehaviour
     }
     public void ChangeWavesText(int number, int count)
     {
-        _wavesText.text = $"{number.ToString()} из {count.ToString()} волн пройдено";
+        _wavesText.text = $"{number.ToString()} из {count.ToString()} волны пройдено";
     }
     
     public void ChangeEnemiesText(int number, int count)
     {
-        _enemiesText.text = $"{number.ToString()} из {count.ToString()} врагов убито";
+        _enemiesText.text = $"{number.ToString()} из {count.ToString()} убито";
     }
 }
