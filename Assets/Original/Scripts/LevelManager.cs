@@ -18,6 +18,8 @@ public class LevelManager : ILevelManager
 
    private int _unlockCount;
 
+   public event Action OnLoadLevelEvent;
+
    public LevelManager(List<Level> levels, SceneData firstScene)
    {
       _levels = levels;
@@ -31,7 +33,13 @@ public class LevelManager : ILevelManager
          }
          else
          {
-            levels[i].SetNextLevel(levels[0]);
+            Level firstSceneLevel = new Level
+            {
+               SceneData = firstScene
+            };
+            
+            levels[i].SetNextLevel(firstSceneLevel);
+            /*levels[i].SetNextLevel(levels[0]);*/
          }
       }
       
@@ -80,6 +88,7 @@ public class LevelManager : ILevelManager
    
    public void LoadLevel(Level level)
    {
+      OnLoadLevelEvent?.Invoke();
       SceneManager.LoadScene(level.SceneData.Name);
       _currentLevel = level;
    }

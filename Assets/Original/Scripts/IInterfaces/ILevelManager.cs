@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace IInterfaces
@@ -12,5 +13,7 @@ namespace IInterfaces
         public void LoadLevel(Level level);
 
         public void RestartLevel();
+
+        public event Action OnLoadLevelEvent;
     }
 }
