@@ -22,6 +22,7 @@ public class ADController : IInterstitialAdListener, IAppodealInitializationList
         if(Appodeal.isLoaded(Appodeal.INTERSTITIAL)) {
             Appodeal.show(Appodeal.INTERSTITIAL);
         }
+        Debug.Log("Show Interstitial");
     }
     public void onInterstitialLoaded(bool isPrecache)
     {
